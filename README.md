@@ -1,10 +1,10 @@
 # Middleman Pre-Release
-A 100% type safe API to the [x-callback-url scheme](http://x-callback-url.com).
+A 100% type safe API to the [x-callback-url scheme](http://x-callback-url.com). 
+
+> This project is at a very early stage. For the time being there is no versioning, and breaking changes are to be expected any time.
 
 * [Setup](#setup)
-    - [macOS](#macos)
-    - [iOS 13 and up](#ios-13-and-up)
-    - [iOS 12 and below](#ios-12-and-below)
+  + [Receiving urls](#receiving-urls)
   + [Manually defining your url scheme](#manually-defining-your-url-scheme)
 * [API](#api)
   + [Basic workflow](#basic-workflow)
@@ -16,25 +16,22 @@ A 100% type safe API to the [x-callback-url scheme](http://x-callback-url.com).
 ## Setup
 First of all, make sure your app has a [custom url scheme](https://developer.apple.com/documentation/uikit/inter-process_communication/allowing_apps_and_websites_to_link_to_your_content/defining_a_custom_url_scheme_for_your_app) implemented. Middleman will then read the first entry in the `CFBundleURLTypes` entry in the `Info.plist` file in the main bundle. You can also [manually define a url scheme](#manually-defining-your-url-scheme).
 
-#### macOS
-In your `NSAppDelegate`:
+### Receiving urls
 ```swift
+// macOS
+// In your `NSAppDelegate`:
 func application(_ application: NSApplication, open urls: [URL]) {
     Middleman.receive(urls)
 }
-```
 
-#### iOS 13 and up
-In your `UISceneDelegate`:
-```swift
+// iOS 13 and up
+// In your `UISceneDelegate`:
 func scene(_ scene: UIScene, openURLContexts urlContexts: Set<UIOpenURLContext>) {
     Middleman.receive(urlContexts)
 }
-```
 
-#### iOS 12 and below
-In your `UIAppDelegate`:
-```swift
+// iOS 12 and below
+// In your `UIAppDelegate`:
 func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
     Middleman.receive(url)
 }
