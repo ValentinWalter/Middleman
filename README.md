@@ -6,15 +6,16 @@ A 100% type safe API to the [x-callback-url scheme](http://x-callback-url.com).
 * [Setup](#setup)
   + [Receiving urls](#receiving-urls)
   + [Manually defining your url scheme](#manually-defining-your-url-scheme)
+  + [Installation](#installation)
 * [API](#api)
   + [Basic workflow](#basic-workflow)
   + [Actions](#actions)
   + [Apps and Receivers](#apps-and-receivers)
-    - [Running an Action](#running-an-action)
+  + [Running an Action](#running-an-action)
 * [Best Practices](#best-practices)
 
 ## Setup
-First of all, make sure your app has a [custom url scheme](https://developer.apple.com/documentation/uikit/inter-process_communication/allowing_apps_and_websites_to_link_to_your_content/defining_a_custom_url_scheme_for_your_app) implemented. Middleman will then read the first entry in the `CFBundleURLTypes` entry in the `Info.plist` file in the main bundle. You can also [manually define a url scheme](#manually-defining-your-url-scheme).
+First of all, make sure your app has a [custom url scheme](https://developer.apple.com/documentation/uikit/inter-process_communication/allowing_apps_and_websites_to_link_to_your_content/defining_a_custom_url_scheme_for_your_app) implemented. Middleman will then read the first entry in the `CFBundleURLTypes` array in the main bundle's `Info.plist`. You can also [manually define a url scheme](#manually-defining-your-url-scheme).
 
 ### Receiving urls
 ```swift
@@ -46,6 +47,18 @@ struct MyApp: Receiver {
 
 // Then, notify Middleman of your custom implementation
 Middleman.receiver = MyApp()
+```
+
+### Installation
+Middleman is based on the [Swift Package Manager](https://swift.org/package-manager/). Write this in your `Package.swift` file:
+```swift
+let package = Package(
+    ...
+    dependencies: [
+        .package(url: "https://github.com/ValentinWalter/middleman.git", .branch("pre-release"))
+    ],
+    ...
+)
 ```
 
 ## API
@@ -100,7 +113,7 @@ struct MyApp: Receiver {
 }
 ```
 
-#### Running an Action
+### Running an Action
 Here's how running the above implementation of `OpenNote` would look.
 ```swift
 Bear().run(
@@ -160,5 +173,7 @@ extension Bear {
 }
 
 // Opening a note is now as easy as
-Bear.openNote(titled: "Title")
+Bear.openNote(titled: "Title") {
+    print("🥳")
+}
 ```
