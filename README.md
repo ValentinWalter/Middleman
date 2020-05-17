@@ -18,7 +18,7 @@ A 100% type safe API to the [x-callback-url scheme](http://x-callback-url.com).
 First of all, make sure your app has a [custom url scheme](https://developer.apple.com/documentation/uikit/inter-process_communication/allowing_apps_and_websites_to_link_to_your_content/defining_a_custom_url_scheme_for_your_app) implemented. Middleman will then read the first entry in the `CFBundleURLTypes` array in the main bundle's `Info.plist`. You can also [manually define a url scheme](#manually-defining-your-url-scheme).
 
 ### Receiving urls
-For Middleman to be able to parse incoming urls, you need to put one of the follwowing methods in the Delegate appropriate for your platform.
+For Middleman to be able to parse incoming urls, you need to put one of the following methods in the Delegate appropriate for your platform.
 ```swift
 // macOS
 // In your `NSAppDelegate`:

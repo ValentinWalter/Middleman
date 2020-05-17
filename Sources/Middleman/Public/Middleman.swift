@@ -31,12 +31,12 @@ public struct Middleman {
     /// Call this in the `application(_:open:)` method in your `NSAppDelegate`.
     ///
     /// - Parameter url: The array of urls with which your app was opened.
-    public static func receive(urls: [URL]) throws { try urls.forEach(receive) }
+    public static func receive(_ urls: [URL]) throws { try urls.forEach(receive) }
 
     /// Call this in the `application(_:open:options:)` method in your `UIAppDelegate`.
     ///
     /// - Parameter url: The url with which your app was opened.
-    public static func receive(url: URL) throws {
+    public static func receive(_ url: URL) throws {
         // Compare incoming url with url components described in config
         let xurl = try ResponseURL(from: url)
         // If action is response to action sent by Middleman
@@ -100,7 +100,7 @@ extension Middleman {
     /// Call this in the `scene(_:openURLContexts:)` method in your `UISceneDelegate`.
     ///
     /// - Parameter urlContexts: The array of `UIOpenURLContext`s with which your app were opened.
-    public static func receive(urlContexts: Set<UIOpenURLContext>) throws {
+    public static func receive(_ urlContexts: Set<UIOpenURLContext>) throws {
         let urls = urlContexts.map(\.url)
         try urls.forEach(receive)
     }
