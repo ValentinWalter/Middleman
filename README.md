@@ -1,23 +1,24 @@
 # Middleman Pre-Release
 A 100% type safe API to the [x-callback-url scheme](http://x-callback-url.com). 
 
-> This project is at a very early stage. For the time being there is no versioning, and breaking changes are to be expected any time.
+> This project is at an early stage. For the time being there is no versioning, and breaking changes are to be expected any time.
 
 * [Setup](#setup)
-  + [Receiving urls](#receiving-urls)
-  + [Manually defining your url scheme](#manually-defining-your-url-scheme)
-  + [Installation](#installation)
+	+ [Receiving urls](#receiving-urls)
+	+ [Manually defining your url scheme](#manually-defining-your-url-scheme)
+	+ [Installation](#installation)
 * [API](#api)
-  + [Basic workflow](#basic-workflow)
-  + [Actions](#actions)
-  + [Apps and Receivers](#apps-and-receivers)
-  + [Running an Action](#running-an-action)
+	+ [Basic workflow](#basic-workflow)
+	+ [Actions](#actions)
+	+ [Apps and Receivers](#apps-and-receivers)
+	+ [Running an Action](#running-an-action)
 * [Best Practices](#best-practices)
 
 ## Setup
 First of all, make sure your app has a [custom url scheme](https://developer.apple.com/documentation/uikit/inter-process_communication/allowing_apps_and_websites_to_link_to_your_content/defining_a_custom_url_scheme_for_your_app) implemented. Middleman will then read the first entry in the `CFBundleURLTypes` array in the main bundle's `Info.plist`. You can also [manually define a url scheme](#manually-defining-your-url-scheme).
 
 ### Receiving urls
+For Middleman to be able to parse incoming urls, you need to put one of the follwowing methods in the Delegate appropriate for your platform.
 ```swift
 // macOS
 // In your `NSAppDelegate`:
@@ -39,7 +40,7 @@ func application(_ app: UIApplication, open url: URL, options: [UIApplication.Op
 ```
 
 ### Manually defining your url scheme
-If Middleman's default behavior does not work for you, you can manually define your url scheme. You do so by setting `Middleman.receiver` to your custom implementation.
+If Middleman's default behavior of reading from the `Info.plist` file does not work for you, you can manually define your url scheme. You do so by setting `Middleman.receiver` to your custom implementation.
 ```swift
 struct MyApp: Receiver {
     var scheme: String { "my-scheme" }
@@ -63,12 +64,12 @@ let package = Package(
 
 ## API
 ### Basic workflow
-* Define an Action, representing a x-callback-url action
-* Define an App, which is responsible for sending and receiving actions
-* Running actions with their `Input`, optionally providing a closure that receives the Action's `Output`
+* Define an `Action`, representing an x-callback-url action.
+* Define an `App`, which is responsible for sending and receiving actions.
+* Run actions with their `Input` associated type, optionally providing a closure that receives the Action's `Output`.
 
 ### Actions
-An Action in Middleman represents an x-callback-url action. You create an Action by conforming to the `Action` protocol. This requires you to define an `Input` and `Output`, which themselves require to conform to `Codable`. By default, Middleman will convert the name of the `Action` type from uppercase camelcase to [kebab-case](https://en.wikipedia.org/wiki/Letter_case#Special_case_styles). In the example below, this would result in `"open-note"`. You can overwrite this behavior by implementing `path` into your Action.
+An Action in Middleman represents an x-callback-url action. You create an Action by conforming to the `Action` protocol. This requires you to define an `Input` and `Output`, which themselves require conformance to `Codable`. By default, Middleman will infer the path name of the action to be the [kebab-case](https://en.wikipedia.org/wiki/Letter_case#Special_case_styles) equivalent of the name of the `Action` type. In the example below, this would result in `"open-note"`. You can overwrite this behavior by implementing the `path` property into your Action.
 ```swift
 // Shortened version of Bear's /open-note action
 struct OpenNote: Action {
@@ -84,17 +85,28 @@ struct OpenNote: Action {
 }
 ```
 
-An implementation of an Action that takes a `URL` and has no output.
+You can make handy use of `typealias` when it doesn't make sense to create your own type. Here we have an Action that takes a `URL` and has no output.
 ```swift
 struct OpenURL: Action {
     typealias Input = URL
     typealias Output = Never
 }
 ```
-Sometimes an Action doesn't have an `Input` or `Output`. In those cases, just set it to be `Never` and Middleman handles the rest. Also, when you don't need to define a custom type for your `Input` or `Output`, just make use of `typealias`.
+Sometimes an Action doesn't have an `Input` or `Output`. In those cases, just set it to be `Never` and Middleman handles the rest.
+
+#### Receiving Actions
+You can implement the `receive(input:)` method in your Action to customize the behavior when the action was received by Middleman. Note that you also need to include your receiving action in your [Receiver's](#apps-and-receivers) `receivingActions` property.
+```swift
+struct OpenBook: Action {
+    ...
+    func receive(input: Input) {
+        // Handle opening book
+    }
+}
+```
 
 ### Apps and Receivers
-Sending Actions requires an `App`. You create one by conforming to the `App` protocol. Similarly to the Action protocol, Middleman infers the scheme of the app to be the name of the type. By default, `host` will be assumed to be `"x-callback-url"`, as specified by the [x-callback-url 1.0 DRAFT spec](http://x-callback-url.com/specifications/).
+Sending Actions requires an `App`. You create one by conforming to the `App` protocol. Similarly to the `Action` protocol, Middleman infers the scheme of the app to be the kebab-case equivalent of the name of the conforming type. By default, the `host` property will be assumed to be `"x-callback-url"`, as specified by the [x-callback-url 1.0 DRAFT spec](http://x-callback-url.com/specifications/).
 ```swift
 struct Bear: App {
     // By default, Middleman infers the two properties as implemented below
@@ -103,18 +115,18 @@ struct Bear: App {
 }
 ```
 
-If your intent is to not only *send*, but *receive* actions, you define a `Receiver`. You then need to notify Middleman of your custom implementation, as described in [Manually defining your url scheme](#manually-defining-your-url-scheme).
+If your intent is to not only *send*, but *receive* actions, you define a `Receiver`, which inherits from the `App` protocol.  This requires you to specify the actions with which your App can be opened. You then need to notify Middleman of your custom implementation, as described in [Manually defining your url scheme](#manually-defining-your-url-scheme).
 ```swift
 struct MyApp: Receiver {
     var receivingActions = [
-        MyAction().erased(),
+        OpenBook().erased(),
         AnotherAction().erased()
     ]
 }
 ```
 
 ### Running an Action
-Here's how running the above implementation of `OpenNote` would look.
+Here's how running the [above implementation](#actions) of `OpenNote` would look.
 ```swift
 Bear().run(
     action: OpenNote(),
@@ -132,7 +144,7 @@ Bear().run(
 )
 ```
 
-In the case of an action not having an Input or Output.
+In the case of an action not having an `Input` or `Output`, you would have something like this.
 ```swift
 SomeApp().run(
     action: SomeAction(),
@@ -147,9 +159,13 @@ SomeApp().run(
 ```
 
 ## Best Practices
-Calling the `run` method can get quite verbose over time. To make working with your actions more pleasant, you can define static convenience methods in your `App`. Following the `OpenNote` example from above:
+It's a good idea to namespace your actions in an extension of their App. You can then also define static convenience functions, as calling the `run` method can get quite verbose over time. Following the `OpenNote` example from above:
 ```swift
 extension Bear {
+    // Namespaced declaration of the `OpenNote` action
+    struct OpenNote { ... }
+
+    // Static convenience function, making working with `OpenNote` more pleasant
     static func openNote(
         titled title: String,
         excludeTrashed: Bool = false,
@@ -163,8 +179,8 @@ extension Bear {
             ),
             then: { response in
                 switch response {
-                case let .success(output): callback()
-                case let .error(code, message): break
+                case .success: callback()
+                case .error: break
                 case .cancel: break
                 }
             }
