@@ -19,12 +19,12 @@ public struct Middleman {
     ///
     /// Middleman tries to read your custom scheme from your info dictionary.
     /// - Note: Ignore this if you're aim is just to provide an interface for other applications.
-    public static var receiver: Receiver = {
+    public static var receiver: Receiver? = {
         do {
             return try DefaultReceiver.from(bundle: .main)
         } catch {
             print(error)
-            return DefaultReceiver()
+            return nil
         }
     }()
 
@@ -50,7 +50,7 @@ public struct Middleman {
             try action(xurl)
         } else {
             // Else, leave processing to the Receiver's implmentation
-            try receiver.receive(xurl: xurl)
+			try receiver?.receive(xurl: xurl)
         }
     }
 

@@ -20,9 +20,6 @@ internal struct DefaultReceiver: Receiver {
     /// Creates an instance of `DefaultApp` with the specified `scheme`.
     init(scheme: String) { self.scheme = scheme }
 
-    /// Creates an instance of `DefaultApp` with an empty `scheme`.
-    init() { self.scheme = "" }
-
     /// Creates an instance of `DefaultApp` with `scheme` set to the first entry found in `CFBundleURLTypes` in the specified bundle's info dictionary.
     /// - Throws: `BundleError`
     static func from(bundle: Bundle) throws -> Self {

@@ -25,16 +25,18 @@ extension Action {
         callbackURL?.queryItems += queryItems(from: input)
 
         if let id = callbackURL?.id, callback {
-            callbackURL?.queryItems += xCallbackParameters(for: id)
+            callbackURL?.queryItems += xCallbackParameters(for: id) ?? []
         }
 
         return callbackURL
     }
 
-    private func xCallbackParameters(for id: UUID) -> [URLQueryItem] {
+    private func xCallbackParameters(for id: UUID) -> [URLQueryItem]? {
         PlainResponse.allCases
             .compactMap { response in
-                let responseComponents = Middleman.receiver.urlComponents
+				guard let receiver = Middleman.receiver else { return nil }
+				
+				let responseComponents = receiver.urlComponents
                 guard let responseURL = ResponseURL(from: responseComponents, response: response) else { return nil }
                 responseURL.id = id
 

@@ -50,6 +50,13 @@ public extension Action {
         // in `Middleman.receive(url:)` with the decoder fit
         // to create this action's `Ouput`)
         guard let callback = callback else { return }
+		guard Middleman.receiver != nil else {
+			print("""
+			⚠️ You have specified a callback but not a Receiver.
+			ℹ️ Set a receiver via `Middleman.receiver = ...`
+			""")
+			return
+		}
         Middleman.register(for: xurl.id) { xurl in
             switch xurl.response {
             case .success:
