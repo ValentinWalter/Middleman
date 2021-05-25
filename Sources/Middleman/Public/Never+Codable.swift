@@ -15,15 +15,15 @@ import Foundation
 
 extension Never: Codable {
     public init(from decoder: Decoder) throws {
-        throw Error.cannotBeDecoded
+        throw CodingError.cannotBeDecoded
     }
 
     public func encode(to encoder: Encoder) throws {
-        throw Error.cannotBeEncoded
+        throw CodingError.cannotBeEncoded
     }
 
-    enum Error: String, Swift.Error {
-        case cannotBeDecoded = "Never cannot be decoded."
-        case cannotBeEncoded = "Never cannot be encoded."
+    enum CodingError: String, Swift.Error {
+        case cannotBeDecoded = "`Never` cannot be decoded."
+        case cannotBeEncoded = "`Never` cannot be encoded."
     }
 }

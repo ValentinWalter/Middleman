@@ -19,11 +19,13 @@ extension Action {
     /// - Parameter input: The `Input` to convert to an endpoint.
     /// - Parameter callback: Whether this action url include x-callback parameters.
     /// - Returns: The `Endpoint` reflecting this action.
-    func toXCallbackURL(app: App, input: Input, callback: Bool) -> CallbackURL? {
+    func toXCallbackURL(app: App, input: Input?, callback: Bool) -> CallbackURL? {
         let callbackURL = CallbackURL(from: app.urlComponents)
         callbackURL?.path = self.path.prefixed(with: "/")
-        callbackURL?.queryItems += queryItems(from: input)
-
+		if let input = input {
+			callbackURL?.queryItems += queryItems(from: input)
+		}
+			
         if let id = callbackURL?.id, callback {
             callbackURL?.queryItems += xCallbackParameters(for: id) ?? []
         }
@@ -43,7 +45,7 @@ extension Action {
                 // Create url from components and make x-callback parameter
                 guard let url = responseURL.url else { return nil }
                 let xCallbackParameter = URLQueryItem(
-                    name: response.asParameterName,
+                    name: response.asParameterKey,
                     value: url.absoluteString
                 )
 

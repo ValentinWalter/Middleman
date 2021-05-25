@@ -18,24 +18,23 @@ import UIKit
 #endif
 
 public extension Action {
-    #if swift(>=5.2)
     /// Open the `Endpoint` of this action in the current workspace.
     /// - Parameter input: The input with which to run this action.
     /// - Parameter callback: Called when the client answers either
     /// of the x-callback parameters.
-//    func callAsFunction(on app: App, with input: Input, then callback: Callback<Output?>?) {
-//        run(on: app, with: input, then: callback)
-//    }
-    #endif
-
-    /// Open the `Endpoint` of this action in the current workspace.
-    /// - Parameter input: The input with which to run this action.
-    /// - Parameter callback: Called when the client answers either
-    /// of the x-callback parameters.
-    func run(on app: App, with input: Input, then callback: Callback<Output?>?) {
-        // Convert this action to an endpoint
-        guard let xurl = toXCallbackURL(app: app, input: input, callback: callback != nil), let url = xurl.url else {
-            print("Could not convert Action '\(String(describing: self))' to x-callback url.")
+    fileprivate func _run(on app: App, with input: Input?, then callback: Callback<Output?>?) {
+        // Convert this action to a URL
+        guard let xurl = toXCallbackURL(app: app,
+                                        input: input,
+                                        callback: callback != nil),
+              let url = xurl.url else
+        {
+            print(
+                """
+                ⚠️ Could not convert Action '\(String(describing: self))' to \
+                x-callback url.
+                """
+            )
             return
         }
 
@@ -64,27 +63,50 @@ public extension Action {
                     let output = try Output(from: xurl.decoder)
                     callback(.success(output))
                 } catch {
-                    // Will always happen in case of Output being `Never`
-                    // TODO: Replace nil with error
-                    callback(.success(nil))
+                    if error is Never.CodingError {
+                        callback(.success(nil))
+                    } else {
+                        callback(
+                            .error(
+                                code: -1,
+                                message: """
+                                Middleman: `Ouput` could not be decoded.
+                                """
+                            )
+                        )
+                    }
                 }
             case .error:
-                callback(.cancel)
-            case .cancel:
                 callback(.error(
                     code: xurl.errorCode ?? -1,
-                    message: xurl.errorMessage ?? "Middleman: No error message received."
+                    message: xurl.errorMessage ??
+                        "Middleman: No error message received."
                 ))
+            case .cancel:
+                callback(.cancel)
             }
         }
     }
 }
 
-// Provide option to run action without callback when `Output` is `Never`
+public extension Action {
+	func run(on app: App, with input: Input, then callback: Callback<Output?>?) {
+		_run(on: app, with: input, then: callback)
+	}
+}
+
+public extension Action where Input == Never {
+	func run(on app: App) {
+		_run(on: app, with: nil, then: nil)
+	}
+	
+	func run(on app: App, then callback: Callback<Output?>?) {
+		_run(on: app, with: nil, then: callback)
+	}
+}
+
 public extension Action where Output == Never {
-    /// Open the `Endpoint` of this action in the current workspace.
-    /// - Parameter input: The input with which to run this action.
     func run(on app: App, with input: Input) {
-        run(on: app, with: input, then: nil)
+        _run(on: app, with: input, then: nil)
     }
 }

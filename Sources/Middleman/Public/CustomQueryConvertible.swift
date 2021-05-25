@@ -11,9 +11,10 @@
 
 import Foundation
 
-/// A protocol defining the value a type should take when used as query value in a URL.
+/// A protocol types can adopt to customize the string it should take when
+/// used in the value of a query of a URL.
 public protocol CustomQueryConvertible {
-    /// The value a type should take when used as query value in a URL.
+	/// The value this type should take when used in the value of a query of a URL.
     var queryValue: String? { get }
 }
 

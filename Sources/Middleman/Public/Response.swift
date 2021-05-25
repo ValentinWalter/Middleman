@@ -16,8 +16,8 @@ import Foundation
 /// - Note: If you need a purely semantic representation, refer to `PlainResponse`.
 public enum Response<Output> {
     case success(Output)
-    case cancel
     case error(code: Int, message: String)
+    case cancel
 }
 
 /// A type abstracting x-callback responses in a purely semantic way.
@@ -25,11 +25,11 @@ public enum Response<Output> {
 /// - Note: If you need to transport data, refer to `Response<Output>`.
 public enum PlainResponse: String, CaseIterable {
     case success
-    case cancel
     case error
+    case cancel
 
     /// The name of the query used in x-callback urls.
-    var asParameterName: String {
+    var asParameterKey: String {
         "x-\(rawValue)"
     }
 }
