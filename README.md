@@ -1,19 +1,20 @@
 # 👤 Middleman
 **A 100% type safe API to the [x-callback-url scheme](http://x-callback-url.com).**
 
-* [Overview](#overview)
-* [Setup](#setup)
+* [Overview](#-overview)
+* [Setup](#-setup)
     + [Receiving urls](#receiving-urls)
     + [Manually defining your url scheme](#manually-defining-your-url-scheme)
     + [Installation](#installation)
-* [API](#api)
+* [API](#-api)
     + [Basic workflow](#basic-workflow)
     + [Actions](#actions)
     + [Apps and Receivers](#apps-and-receivers)
     + [Running an Action](#running-an-action)
-* [Best Practices](#best-practices)
+* [Best Practices](#-best-practices)
+* [Behind the scenes](#-behind-the-scenes)
 
-## Overview
+## 🏔 Overview
 Suppose we want to build this `x-callback-url` in Middleman:
 
 ```
@@ -65,11 +66,11 @@ Target().run(
 ```
 
 #### Next steps
-* Flesh out the receiving-API so Middleman can be used to create new APIs, not just implement existing ones
+* Overhaul the receiving-urls-API so Middleman can be used to maintain x-callback APIs, not just work with existing ones
 * Implement a command-line interface using `apple/swift-argument-parser`
 * Migrate from callbacks to `async` in Swift 6
 
-## Setup
+## 🛠 Setup
 If you want to receive callbacks you need to make sure your app has a [custom url scheme](https://developer.apple.com/documentation/uikit/inter-process_communication/allowing_apps_and_websites_to_link_to_your_content/defining_a_custom_url_scheme_for_your_app) implemented. Middleman will then read the first entry in the `CFBundleURLTypes` array in the main bundle's `Info.plist`. You can also [manually define a url scheme](#manually-defining-your-url-scheme).
 
 ### Receiving urls
@@ -126,7 +127,7 @@ let package = Package(
 )
 ```
 
-## API
+## 👾 API
 ### Basic workflow
 * Define an `Action`, representing an x-callback-url action.
 * Define an `App`, which is responsible for sending and receiving actions.
@@ -228,7 +229,7 @@ SomeApp().run(
 )
 ```
 
-## Best Practices
+## 🤝 Best Practices
 It's a good idea to namespace your actions in an extension of their `App`. You can then also define static convenience functions, as calling the `run` method can get quite verbose. Following the `OpenNote` example from above:
 
 ```swift
@@ -266,3 +267,6 @@ Bear.openNote(titled: "Title") { note in
     print("\(note) 🥳")
 }
 ```
+
+## 🎭 Behind the scenes
+Middleman uses a custom `Decoder` to go from raw URL to your `Action.Output`. Dispatched actions are stored with a `UUID` that Middleman inserts to each `x-success`/`x-error`/`x-cancel` parameter to match actions and their stored callbacks.
