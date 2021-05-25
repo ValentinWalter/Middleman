@@ -121,7 +121,7 @@ Middleman is a [Swift Package](https://swift.org/package-manager/). Write this i
 let package = Package(
     ...
     dependencies: [
-        .package(url: "https://github.com/ValentinWalter/middleman.git", .branch("pre-release"))
+        .package(url: "https://github.com/ValentinWalter/middleman.git", from: "1.0.0")
     ],
     ...
 )
