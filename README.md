@@ -70,6 +70,10 @@ Target().run(
 * Implement a command-line interface using `apple/swift-argument-parser`
 * Migrate from callbacks to `async` in Swift 6
 
+#### Examples
+* 🍯 [Honey](https://github.com/ValentinWalter/Honey) uses Middleman to provide a swifty API for Bear's x-callback-url API
+* File a pull request to include your own project!
+
 ## 🛠 Setup
 If you want to receive callbacks you need to make sure your app has a [custom url scheme](https://developer.apple.com/documentation/uikit/inter-process_communication/allowing_apps_and_websites_to_link_to_your_content/defining_a_custom_url_scheme_for_your_app) implemented. Middleman will then read the first entry in the `CFBundleURLTypes` array in the main bundle's `Info.plist`. You can also [manually define a url scheme](#manually-defining-your-url-scheme).
 
