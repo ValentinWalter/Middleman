@@ -3,12 +3,10 @@
 //  Middleman
 //
 //  Created by Valentin Walter on 4/19/20.
-//  
 //
-/// # Abstract:
-/// To allow defining `Action.Output` as `Never` when
-/// the action never produces an Output, `Never` has to
-/// conform to `Codable`.
+//  To allow defining `Action.Output` as `Never` when
+//  the action never produces an Output, `Never` has to
+//  conform to `Codable`.
 //
 
 import Foundation

@@ -4,9 +4,8 @@
 //
 //  Created by Valentin Walter on 4/18/20.
 //
-//
-//  Abstract:
-//  Extensions to various Delegates.
+//  Extensions to various delegates. This has been archived to look at again in
+//  the future.
 //
 
 import Foundation

@@ -3,16 +3,13 @@
 //  Middleman
 //
 //  Created by Valentin Walter on 4/23/20.
-//  
-//
-//  Abstract:
-//
 //
 
 import Foundation
 
-/// Middleman uses this `Receiver` as default when you do not specify any custom `Receiver` yourself.
-/// This is useful if you only *send* actions, but do not intend on *receiving* any.
+/// Middleman uses this `Receiver` as default when you do not specify any custom
+/// `Receiver` yourself. This is useful if you only *send* actions, but do not
+/// intend on *receiving* any.
 internal struct DefaultReceiver: Receiver {
     let scheme: String
     let receivingActions: [AnyAction] = []
@@ -20,7 +17,8 @@ internal struct DefaultReceiver: Receiver {
     /// Creates an instance of `DefaultApp` with the specified `scheme`.
     init(scheme: String) { self.scheme = scheme }
 
-    /// Creates an instance of `DefaultApp` with `scheme` set to the first entry found in `CFBundleURLTypes` in the specified bundle's info dictionary.
+    /// Creates an instance of `DefaultApp` with `scheme` set to the first entry
+	/// found in `CFBundleURLTypes` in the specified bundle's info dictionary.
     /// - Throws: `BundleError`
     static func from(bundle: Bundle) throws -> Self {
         //TODO: Break down statements

@@ -21,9 +21,14 @@ public protocol App {
 }
 
 public extension App {
+	/// The `url-scheme://` of the app. Usually just the lowercased app name, so
+	/// `AppName` becomes `appname`.
+	///
+	/// By default this is the lowercased type name of your app.
     var scheme: String {
         String(describing: type(of: self)).lowercased()
     }
-
+	
+	/// By default, `host` will be assumed to be `"x-callback-url"`, as specified by the [x-callback-url 1.0 DRAFT spec](http://x-callback-url.com/specifications/).
     var host: String { "x-callback-url" }
 }

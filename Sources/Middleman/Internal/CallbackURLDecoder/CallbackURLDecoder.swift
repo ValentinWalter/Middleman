@@ -3,15 +3,13 @@
 //  Middleman
 //
 //  Created by Valentin Walter on 4/16/20.
-//  
-//
-//  Abstract:
-//
 //
 
 import Foundation
 import StringCase
 
+/// This decoder is responsible for decoding incoming URLs into their
+/// corresponding `Action.Output`s.
 struct CallbackURLDecoder: Decoder {
     var codingPath: [CodingKey]
     var userInfo: [CodingUserInfoKey: Any] = [:]

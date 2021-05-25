@@ -4,10 +4,6 @@
 //
 //  Created by Valentin Walter on 4/15/20.
 //  
-//
-//  Abstract:
-//  A protocol defining the value a type should take when used as query value in a URL.
-//
 
 import Foundation
 

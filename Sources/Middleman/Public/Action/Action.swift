@@ -3,21 +3,15 @@
 //  Middleman
 //
 //  Created by Valentin Walter on 4/13/20.
-//  
-//
-//  Abstract:
-//  A protocol abstracting an x-callback-url.
 //
 
 import Foundation
 import StringCase
 
-public typealias ActionInput = Codable
-public typealias ActionOutput = Codable
-
+/// A protocol abstracting an x-callback-url.
 public protocol Action {
-    associatedtype Input: ActionInput
-    associatedtype Output: ActionOutput
+    associatedtype Input: Codable
+    associatedtype Output: Codable
 
     /// Called when Middleman receives url that corresponds to this action.
     /// - Parameter input: This action's `Input`.
@@ -37,6 +31,7 @@ public extension Action {
         // Create path by converting name of action to kebab-case
         String(describing: self).kebabCased()
     }
-
+	
+	/// Type-erase this `Action` to `AnyAction`.
     func erased() -> AnyAction { .init(from: self) }
 }

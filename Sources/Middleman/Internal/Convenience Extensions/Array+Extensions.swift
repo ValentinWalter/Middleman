@@ -3,16 +3,14 @@
 //  Middleman
 //
 //  Created by Valentin Walter on 4/17/20.
-//  
-//
-//  Abstract:
-//
 //
 
 import Foundation
 
 internal extension Array {
-
+	/// Appends the element and returns a new array.
+	/// - Parameter element: The element to append.
+	/// - Returns: A new array.
     func appending(_ element: Element) -> Self {
         var array = self
         array.append(element)
@@ -39,5 +37,4 @@ internal extension Array {
         var reversed = Array(self.reversed())
         return reversed.removeFirst(where: shouldBeRemoved)
     }
-
 }

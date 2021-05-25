@@ -4,13 +4,10 @@
 //
 //  Created by Valentin Walter on 4/15/20.
 //
-//
-//  Abstract:
-//  The entity responsible for parsing incoming urls.
-//
 
 import Foundation
 
+/// The space responsible for parsing incoming urls.
 public struct Middleman {
 
     //MARK:- Public

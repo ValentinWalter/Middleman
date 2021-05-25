@@ -3,14 +3,11 @@
 //  Middleman
 //
 //  Created by Valentin Walter on 4/23/20.
-//  
-//
-//  Abstract:
-//
 //
 
 import Foundation
 
+/// Any errors thrown when receiving actions.
 public enum ReceiveError: Error, CustomStringConvertible {
     case noRunningActionFound(URL)
     case noActionFound(URL)
@@ -29,7 +26,7 @@ public enum ReceiveError: Error, CustomStringConvertible {
         case let .noActionFound(url):
             return """
             No receivable action was found for url (\(url)). \
-            Make sure you defined all action you want to be \
+            Make sure you defined all actions you want to be \
             receivable in the `actions` requirement in your `App`.
             """
         case let .urlCorrupted(url, message):

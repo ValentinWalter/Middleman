@@ -3,14 +3,11 @@
 //  Middleman
 //
 //  Created by Valentin Walter on 5/16/20.
-//  
-//
-//  Abstract:
-//  A type proividing type-erasure for Actions.
 //
 
 import Foundation
 
+/// A type proividing type-erasure for actions.
 public struct AnyAction {
     let receive: (_ decoder: Decoder) throws -> Void
     let path: String

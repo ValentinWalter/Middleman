@@ -4,15 +4,13 @@
 //
 //  Created by Valentin Walter on 4/18/20.
 //  
-//  --------------
-//   - Outdated -
-//  --------------
+//  Once the method of customizing scheme, host and path of an App. This has
+//  been archived to look at again in the future.
 //
 
 import Foundation
 
 public extension Middleman {
-
     /**
     The components that will be factored in when creating
     the url your app will be opened by the client with.
@@ -116,5 +114,4 @@ public extension Middleman {
             static let urlSchemesEmpty = BundleError(message: "'CFBundleURLSchemes' in 'Info.plist' is empty.")
         }
     }
-
 }

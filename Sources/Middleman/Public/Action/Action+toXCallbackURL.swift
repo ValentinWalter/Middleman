@@ -1,32 +1,28 @@
 //
-//  Action+ToEndpoint.swift
+//  Action+toXCallbackURL.swift
 //  Middleman
 //
 //  Created by Valentin Walter on 4/15/20.
-//  
-//
-//  Abstract:
-//  Method for converting the action to an endpoint.
 //
 
 import Foundation
 import StringCase
 
 extension Action {
-
-    /// Create an `Endpoint` from this action.
-    /// - Parameter app: The app this action is called on.
-    /// - Parameter input: The `Input` to convert to an endpoint.
-    /// - Parameter callback: Whether this action url include x-callback parameters.
-    /// - Returns: The `Endpoint` reflecting this action.
-    func toXCallbackURL(app: App, input: Input?, callback: Bool) -> CallbackURL? {
+	/// Create the actual URL that will be opened by the operating system.
+	/// - Parameters:
+	///   - app: The `App` (url-scheme) with which to run this action.
+	///   - input: The `Action`'s `Input` associated type.
+	///   - hasCallback: Whether the action was equipped with a callback.
+	/// - Returns: An instance of `CallbackURL` to build the actual URL.
+    func toXCallbackURL(app: App, input: Input?, hasCallback: Bool) -> CallbackURL? {
         let callbackURL = CallbackURL(from: app.urlComponents)
         callbackURL?.path = self.path.prefixed(with: "/")
 		if let input = input {
 			callbackURL?.queryItems += queryItems(from: input)
 		}
 			
-        if let id = callbackURL?.id, callback {
+        if let id = callbackURL?.id, hasCallback {
             callbackURL?.queryItems += xCallbackParameters(for: id) ?? []
         }
 
@@ -49,7 +45,8 @@ extension Action {
                     value: url.absoluteString
                 )
 
-                // Finally, append the x-callback parameter to the components that will make up the final url
+                // Finally, append the x-callback parameter to the components
+				// that will make up the final url
                 return xCallbackParameter
             }
     }
@@ -78,7 +75,8 @@ extension Action {
 }
 
 extension App {
-    /// An instance of `URLComponents` based on the `scheme`, `host` and `path` properties.
+    /// An instance of `URLComponents` based on the `scheme`, `host` and `path`
+	/// properties.
     fileprivate var urlComponents: URLComponents {
         var components = URLComponents()
         components.scheme = self.scheme

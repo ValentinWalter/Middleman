@@ -3,10 +3,6 @@
 //  Middleman
 //
 //  Created by Valentin Walter on 4/15/20.
-//  
-//
-//  Abstract:
-//  Two types abstracting x-callback responses.
 //
 
 import Foundation
