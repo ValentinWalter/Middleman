@@ -1,3 +1,5 @@
+<p align="right">⭐️ <a href="http://x-callback-url.com/2021/05/middleman-type-safe-x-callback-url-library/">Featured on the official <code>x-callback-url.com</code> blog</a></p>
+
 # 👤 Middleman
 **A 100% type safe API to the [x-callback-url scheme](http://x-callback-url.com).**
 
