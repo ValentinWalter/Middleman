@@ -46,7 +46,10 @@ struct CallbackURLDecoder: Decoder {
     }
 
     func unkeyedContainer() throws -> UnkeyedDecodingContainer {
-        fatalError()
+		UnkeyedContainer(
+			codingPath: codingPath,
+			items: queries.map(\.key)
+		)
     }
 
     func singleValueContainer() throws -> SingleValueDecodingContainer {
