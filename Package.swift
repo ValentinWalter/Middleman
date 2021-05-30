@@ -20,7 +20,7 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/apple/swift-argument-parser", from: "0.0.6"),
-        .package(url: "https://github.com/ValentinWalter/StringCase", .branch("master")),
+		.package(url: "https://github.com/ValentinWalter/StringCase", from: "1.1.0"),
     ],
     targets: [
         .target(
